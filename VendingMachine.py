@@ -3,9 +3,19 @@ from which_coins_to_return import which_coins_to_return
 
 
 class VendingMachine:
+    """
+    Once an item is selected and the appropriate amount of money is inserted,
+        the vending machine should return the correct product.
+    It should also return change if too much money is provided, or ask for more money
+        if insufficient funds have been inserted.
+    The machine should take an initial load of products and change. The change will be of denominations 1p, 2p, 5p, 10p,
+        20p, 50p, £1, £2. There should be a way of reloading either products or change at a later point.
+    The machine should keep the state of products and change that it contains up to date.
+    """
+
     def __init__(self, item_dict: dict[str, dict[str, int]], coins_number: list[int]) -> None:
         """
-
+        Initialise all variables, numer of coins, and items
         :param item_dict: dictionary of items, where key is name and value a dictionary with 2 keys: amount and price
         :param coins_number: 8 element list/tuple with number of [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p] coins
         """
@@ -25,7 +35,7 @@ class VendingMachine:
 
     def choose_item(self, item_name: str) -> None:
         """
-        Choose the item first to input coins
+        Choose an item
         :param item_name: The name of an item in the VendingMachine
         :return:
         """
@@ -100,6 +110,11 @@ class VendingMachine:
         return returned_item, change_to_return
 
     def reload_change(self, coins_number: list[int]) -> None:
+        """
+        Add coins to the Vending Machine
+        :param coins_number: 8 element list with number of [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p] coins
+        :return:
+        """
         if len(coins_number) != self.denominations_count:
             raise ValueError(
                 f"Expected list size of coins_number: {self.denominations_count}, but got {len(coins_number)}")
@@ -107,6 +122,11 @@ class VendingMachine:
         self._coins = [a + b for a, b in zip(self._coins, coins_number)]
 
     def reload_items(self, item_dict: dict[str, int]) -> None:
+        """
+        Add items to the Vending Machine
+        :param item_dict: dictionary of items, where key is name and value is amount
+        :return:
+        """
         for key in item_dict.keys():
             if key not in self._item_dictionary.keys():
                 raise ValueError(f"Item {key} does not exist, nothing changed")
@@ -114,10 +134,9 @@ class VendingMachine:
         for key, value in item_dict.items():
             self._item_dictionary[key]["amount"] += value
 
-
     def _return_change(self, value: int) -> None | list[int]:
         """
-
+        Find which coins are available and return a list of coins to return given the constraint
         :param value: amount of change to return
         :return: 8 element list with number of coins of each type: [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p]
         """
@@ -127,12 +146,20 @@ class VendingMachine:
 
         return list_of_return_coins
 
+    def __str__(self):
+        """
+        For print statement
+        :return:
+        """
+        return f"Coins in machine: {self._coins}\nCoins inserted:   {self._inserted_coins}\n" \
+               f"Value inserted: {self._value_inserted}\nChosen item: {self._chosen_item}"
+
 
 if __name__ == "__main__":
-    VM = VendingMachine({"ice": {"price": 73, "amount": 5}}, [5, 5, 5, 5, 5, 5, 5, 5])
+    VM = VendingMachine({"ice": {"price": 77, "amount": 9}, "pepsi": {"price": 99, "amount": 15}},
+                        [15, 22, 13, 9, 67, 5, 2, 5])
     VM.choose_item("ice")
     VM.insert_coin("£1")
-    print(VM._coins)
     item, change = VM.submit()
-    print(change)
-    print(VM._coins)
+    print(item, change)
+    print(VM)

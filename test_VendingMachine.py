@@ -2,11 +2,44 @@ import pytest
 from VendingMachine import VendingMachine
 
 
+def test_vending_machine_general():
+    VM = VendingMachine({"ice": {"price": 73, "amount": 5}}, [5, 5, 5, 5, 5, 5, 5, 5])
+    assert VM._coins == [5, 5, 5, 5, 5, 5, 5, 5]
+    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
+    VM.choose_item("ice")
+    VM.insert_coin("£1")
+    item, change = VM.submit()
+    assert item == "ice"
+    assert change == [0, 0, 0, 1, 0, 1, 1, 0]
+    assert VM._coins == [5, 6, 5, 4, 5, 4, 4, 5]
+    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
+    assert VM._value_inserted == 0
+    assert VM._chosen_item is None
+
+    VM = VendingMachine({"ice": {"price": 40, "amount": 5}}, [0, 0, 1, 3, 0, 0, 0, 0])
+    VM.choose_item("ice")
+    VM.insert_coin("£1")
+    item, change = VM.submit()
+    assert item == "ice"
+    assert change == [0, 0, 0, 3, 0, 0, 0, 0]
+    assert VM._coins == [0, 1, 1, 0, 0, 0, 0, 0]
+    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
+    assert VM._value_inserted == 0
+    assert VM._chosen_item is None
+
+
 def test_initialisation():
     with pytest.raises(ValueError):
         VM = VendingMachine({"ice": {"price": 50, "amount": 5}}, [1, 1, 1, 1, 1, 1, 1])
     with pytest.raises(ValueError):
         VM = VendingMachine({"ice": {"price": 50, "amount": 5}}, [1, 1, 1, 1, 1, 1, 1, 1, 1])
+
+    VM = VendingMachine({"ice": {"price": 50, "amount": 5}}, [1, 1, 1, 1, 1, 1, 1, 1])
+    assert VM._item_dictionary == {"ice": {"price": 50, "amount": 5}}
+    assert VM._coins == [1, 1, 1, 1, 1, 1, 1, 1]
+    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
+    assert VM._value_inserted == 0
+    assert VM._chosen_item is None
 
 
 def test_choose_item():
@@ -36,32 +69,6 @@ def test_insert_coin():
 
     VM.insert_coin("£2")
     assert VM._inserted_coins == [2, 1, 1, 1, 1, 1, 1, 1]
-
-
-def test_vending_machine_general():
-    VM = VendingMachine({"ice": {"price": 73, "amount": 5}}, [5, 5, 5, 5, 5, 5, 5, 5])
-    assert VM._coins == [5, 5, 5, 5, 5, 5, 5, 5]
-    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
-    VM.choose_item("ice")
-    VM.insert_coin("£1")
-    item, change = VM.submit()
-    assert item == "ice"
-    assert change == [0, 0, 0, 1, 0, 1, 1, 0]
-    assert VM._coins == [5, 6, 5, 4, 5, 4, 4, 5]
-    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
-    assert VM._value_inserted == 0
-    assert VM._chosen_item is None
-
-    VM = VendingMachine({"ice": {"price": 40, "amount": 5}}, [0, 0, 1, 3, 0, 0, 0, 0])
-    VM.choose_item("ice")
-    VM.insert_coin("£1")
-    item, change = VM.submit()
-    assert item == "ice"
-    assert change == [0, 0, 0, 3, 0, 0, 0, 0]
-    assert VM._coins == [0, 1, 1, 0, 0, 0, 0, 0]
-    assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
-    assert VM._value_inserted == 0
-    assert VM._chosen_item is None
 
 
 def test_reload_change():
