@@ -1,4 +1,14 @@
 def which_coins_to_return(value: int, total_number_of_coins: list[int], coins_values: list[int]) -> None | list[int]:
+    """
+    Function looks for a way to give change using minimum number of coins given limited number of coins
+    :param value: Value to find change for in p
+    :param total_number_of_coins: list with number of [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p] coins
+    :param coins_values: list with values of [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p] coins in p
+    :return: list of coins needed for change
+    """
+    if len(total_number_of_coins) != len(coins_values):
+        raise ValueError(f"total_number_of_coins and coins_values are different lengths")
+
     # Stop the recurrence
     if value == 0:
         return [0, 0, 0, 0, 0, 0, 0, 0]

@@ -23,6 +23,11 @@ class VendingMachine:
         self._chosen_item = None
 
     def choose_item(self, item_name: str) -> None:
+        """
+        Choose the item first to input coins
+        :param item_name: The name of an item in the VendingMachine
+        :return:
+        """
         if item_name not in self._item_dictionary.keys():
             raise ValueError(f"Item \"{item_name}\" does not exist")
 
@@ -32,6 +37,11 @@ class VendingMachine:
         self._chosen_item = item_name
 
     def insert_coin(self, coin_value: str) -> None:
+        """
+        Insert a coin into the Vending Machine
+        :param coin_value: One value out of £2, £1, 50p, 20p, 10p, 5p, 2p, 1p
+        :return:
+        """
         match coin_value:
             case "1p":
                 self._inserted_coins[7] += 1
@@ -61,11 +71,17 @@ class VendingMachine:
                 raise ValueError(f"No such coin")
 
     def submit(self) -> Tuple[str, list[int]]:
+        """
+        Check if enough money was inserted
+        :exception: ValueError if not enough money inserted
+        :exception: ValueError if it is impossible to give change
+        :return: string representing the item, and an 8 element list of change [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p]
+        """
         if self._value_inserted < self._item_dictionary[self._chosen_item]["price"]:
             expected_money = self._item_dictionary[self._chosen_item]["price"]
             raise ValueError(f"Not enough money inserted. Expected: £{expected_money/100} Got: £{self._value_inserted/100}")
 
-        change_to_return: list[int] | None = self.return_change(self._value_inserted - self._item_dictionary[self._chosen_item]["price"])
+        change_to_return: list[int] | None = self._return_change(self._value_inserted - self._item_dictionary[self._chosen_item]["price"])
 
         if change_to_return is None:
             raise ValueError(f"Impossible to give change")
@@ -80,7 +96,12 @@ class VendingMachine:
 
         return returned_item, change_to_return
 
-    def return_change(self, value: int) -> None | list[int]:
+    def _return_change(self, value: int) -> None | list[int]:
+        """
+
+        :param value: amount of change to return
+        :return: 8 element list with number of coins of each type: [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p]
+        """
 
         total_number_of_coins = [a+b for a, b in zip(self._inserted_coins, self._coins)]
         list_of_return_coins = which_coins_to_return(value, total_number_of_coins, list(self._coins_values))
