@@ -37,7 +37,7 @@ def test_insert_coin():
     assert VM._inserted_coins == [2, 1, 1, 1, 1, 1, 1, 1]
 
 
-def test_vending_machine():
+def test_vending_machine_general():
     VM = VendingMachine({"ice": {"price": 73, "amount": 5}}, [5, 5, 5, 5, 5, 5, 5, 5])
     assert VM._coins == [5, 5, 5, 5, 5, 5, 5, 5]
     assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
@@ -61,3 +61,11 @@ def test_vending_machine():
     assert VM._inserted_coins == [0, 0, 0, 0, 0, 0, 0, 0]
     assert VM._value_inserted == 0
     assert VM._chosen_item is None
+
+
+def test_reload_change():
+    VM = VendingMachine({"ice": {"price": 40, "amount": 5}}, [0, 0, 1, 3, 0, 0, 0, 0])
+    VM.reload_change([1, 1, 1, 1, 1, 1, 1, 1])
+    assert VM._coins == [1, 1, 2, 4, 1, 1, 1, 1]
+    VM.reload_change([1, 1, 1, 1, 0, 0, 0, 0])
+    assert VM._coins == [2, 2, 3, 5, 1, 1, 1, 1]

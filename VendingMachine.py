@@ -11,9 +11,9 @@ class VendingMachine:
         """
 
         # Check if coins_number has proper length
-        denominations_count = 8
-        if len(coins_number) != denominations_count:
-            raise ValueError(f"Expected list size of coins_number: {denominations_count}, but got {len(coins_number)}")
+        self.denominations_count = 8
+        if len(coins_number) != self.denominations_count:
+            raise ValueError(f"Expected list size of coins_number: {self.denominations_count}, but got {len(coins_number)}")
 
         self._item_dictionary: dict[str, dict[str, int]] = item_dict
         self._coins: list[int] = list(coins_number)
@@ -95,6 +95,12 @@ class VendingMachine:
         self._chosen_item = None
 
         return returned_item, change_to_return
+
+    def reload_change(self, coins_number: list[int]) -> None:
+        if len(coins_number) != self.denominations_count:
+            raise ValueError(f"Expected list size of coins_number: {self.denominations_count}, but got {len(coins_number)}")
+
+        self._coins = [a + b for a, b in zip(self._coins, coins_number)]
 
     def _return_change(self, value: int) -> None | list[int]:
         """
