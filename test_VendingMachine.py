@@ -17,6 +17,7 @@ def test_choose_item():
         VM = VendingMachine({"ice": {"price": 50, "amount": 0}}, [1, 1, 1, 1, 1, 1, 1, 1])
         VM.choose_item("ice")
 
+
 def test_insert_coin():
     with pytest.raises(ValueError):
         VM = VendingMachine({"ice": {"price": 50, "amount": 5}}, [1, 1, 1, 1, 1, 1, 1, 1])
@@ -69,3 +70,14 @@ def test_reload_change():
     assert VM._coins == [1, 1, 2, 4, 1, 1, 1, 1]
     VM.reload_change([1, 1, 1, 1, 0, 0, 0, 0])
     assert VM._coins == [2, 2, 3, 5, 1, 1, 1, 1]
+
+
+def test_reload_items():
+    VM = VendingMachine({"ice": {"price": 40, "amount": 5}, "pepsi": {"price": 40, "amount": 5}}, [0, 0, 1, 3, 0, 0, 0, 0])
+    VM.reload_items({"ice": 5})
+    assert VM._item_dictionary["ice"]["amount"] == 10
+    with pytest.raises(ValueError):
+        VM.reload_items({"cola": 5})
+    VM.reload_items({"ice": 5, "pepsi": 10})
+    assert VM._item_dictionary["ice"]["amount"] == 15
+    assert VM._item_dictionary["pepsi"]["amount"] == 15
