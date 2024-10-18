@@ -1,14 +1,8 @@
 from typing import Union, Tuple
 from which_coins_to_return import which_coins_to_return
 
-class VendingMachine:
-    _item_dictionary: dict[str, dict[str, int]] = {}
-    _coins_values: tuple[int] = (200, 100, 50, 20, 10, 5, 2, 1)
-    _coins: list[int] = [0, 0, 0, 0, 0, 0, 0, 0]
-    _inserted_coins: list[int] = [0, 0, 0, 0, 0, 0, 0, 0]
-    _value_inserted = 0
-    _chosen_item = None
 
+class VendingMachine:
     def __init__(self, item_dict: dict[str, dict[str, int]], coins_number: list[int]) -> None:
         """
 
@@ -21,8 +15,12 @@ class VendingMachine:
         if len(coins_number) != denominations_count:
             raise ValueError(f"Expected list size of coins_number: {denominations_count}, but got {len(coins_number)}")
 
-        self._item_dictionary = item_dict
-        self._coins = list(coins_number)
+        self._item_dictionary: dict[str, dict[str, int]] = item_dict
+        self._coins: list[int] = list(coins_number)
+        self._coins_values: tuple[int] = (200, 100, 50, 20, 10, 5, 2, 1)
+        self._inserted_coins: list[int] = [0, 0, 0, 0, 0, 0, 0, 0]
+        self._value_inserted = 0
+        self._chosen_item = None
 
     def choose_item(self, item_name: str) -> None:
         if item_name not in self._item_dictionary.keys():
@@ -65,7 +63,7 @@ class VendingMachine:
     def submit(self) -> Tuple[str, list[int]]:
         if self._value_inserted < self._item_dictionary[self._chosen_item]["price"]:
             expected_money = self._item_dictionary[self._chosen_item]["price"]
-            raise ValueError(f"Not enough money inserted. Expected: £{expected_money/100}. Got £{self._value_inserted}")
+            raise ValueError(f"Not enough money inserted. Expected: £{expected_money/100} Got: £{self._value_inserted/100}")
 
         change_to_return: list[int] | None = self.return_change(self._value_inserted - self._item_dictionary[self._chosen_item]["price"])
 
@@ -73,8 +71,14 @@ class VendingMachine:
             raise ValueError(f"Impossible to give change")
 
         self._coins = [a+b-c for a, b, c in zip(self._coins, self._inserted_coins, change_to_return)]
+        self._value_inserted = 0
+        self._inserted_coins = [0, 0, 0, 0, 0, 0, 0, 0]
 
-        return self._chosen_item, change_to_return
+        returned_item = self._chosen_item
+        self._item_dictionary[self._chosen_item]["amount"] -= 1
+        self._chosen_item = None
+
+        return returned_item, change_to_return
 
     def return_change(self, value: int) -> None | list[int]:
 
@@ -88,8 +92,8 @@ class VendingMachine:
 if __name__ == "__main__":
     VM = VendingMachine({"ice": {"price": 73, "amount": 5}}, [5, 5, 5, 5, 5, 5, 5, 5])
     VM.choose_item("ice")
-    VM.insert_coin("£2")
+    VM.insert_coin("£1")
+    print(VM._coins)
     item, change = VM.submit()
-    print(item)
-    print(VM._coins_values)
     print(change)
+    print(VM._coins)
