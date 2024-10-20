@@ -157,15 +157,41 @@ class VendingMachine:
         For print statement
         :return:
         """
-        return f"Coins in machine: {self._coins}\nCoins inserted:   {self._inserted_coins}\n" \
+        return f"Items in machine: {self._item_dictionary}\nCoin values in p: {self._coins_values}\n" \
+               f"Coins in machine: {self._coins}\nCoins inserted:   {self._inserted_coins}\n" \
                f"Value inserted: {self._value_inserted}\nChosen item: {self._chosen_item}"
 
 
 if __name__ == "__main__":
     VM = VendingMachine({"ice": {"price": 77, "amount": 9}, "pepsi": {"price": 99, "amount": 15}},
                         [15, 22, 13, 9, 67, 5, 2, 5])
+
+    # Enough money
+    print("When enough money: ")
     VM.choose_item("ice")
     VM.insert_coin("£1")
-    item, change = VM.submit()
+    try:
+        item, change = VM.submit()
+    except ValueError as e:
+        print(e)
+        item, change = None, None
     print(item, change)
+
+    print("\nWhen not enough money: ")
+    VM.choose_item("ice")
+    VM.insert_coin("50p")
+    try:
+        item, change = VM.submit()
+    except ValueError as e:
+        print(e)
+        item, change = None, None
+    print(item, change)
+
+    print("\nReloading 5 ice and 10 pepsi")
+    VM.reload_items({"ice": 5, "pepsi": 10})
+
+    print("\nReloading 50 1p coins")
+    VM.reload_change([0, 0, 0, 0, 0, 0, 0, 50])
+
+    print("\nCurrent state:")
     print(VM)
