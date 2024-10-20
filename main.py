@@ -2,10 +2,10 @@ from VendingMachine import VendingMachine
 
 
 VM = VendingMachine({"ice": {"price": 77, "amount": 1}, "pepsi": {"price": 99, "amount": 1}},
-                        [15, 22, 13, 9, 7, 5, 2, 1])
-print("")
+                    [15, 22, 13, 9, 7, 5, 2, 1])
+
 while True:
-    command = input("Choose command: choose_item, insert_coin, submit, insert_and_submit, state\n")
+    command = input("Choose command: choose_item, insert_coin, submit, insert_and_submit, state:\n")
     if command == "choose_item" or command == "choose":
         item = input("Choose ice or pepsi: ")
         try:
