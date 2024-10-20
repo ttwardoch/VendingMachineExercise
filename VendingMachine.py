@@ -33,7 +33,7 @@ class VendingMachine:
         self._coins_values: tuple[int, int, int, int, int, int, int, int] = (200, 100, 50, 20, 10, 5, 2, 1)
         self._inserted_coins: list[int] = [0, 0, 0, 0, 0, 0, 0, 0]
         self._value_inserted = 0
-        self._chosen_item = None
+        self._chosen_item: str | None = None
 
     def choose_item(self, item_name: str) -> None:
         """
