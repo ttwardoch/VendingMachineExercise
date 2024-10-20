@@ -17,7 +17,9 @@ class VendingMachine:
         """
         Initialise all variables, numer of coins, and items
         :param item_dict: dictionary of items, where key is name and value a dictionary with 2 keys: amount and price
+                    e.g. {"ice": {"price": 77, "amount": 9}, "pepsi": {"price": 99, "amount": 15}}
         :param coins_number: 8 element list/tuple with number of [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p] coins
+                    e.g. [15, 22, 13, 9, 67, 5, 2, 5]
         """
 
         # Check if coins_number has proper length
@@ -28,7 +30,7 @@ class VendingMachine:
 
         self._item_dictionary: dict[str, dict[str, int]] = item_dict
         self._coins: list[int] = list(coins_number)
-        self._coins_values: tuple[int] = (200, 100, 50, 20, 10, 5, 2, 1)
+        self._coins_values: tuple[int, int, int, int, int, int, int, int] = (200, 100, 50, 20, 10, 5, 2, 1)
         self._inserted_coins: list[int] = [0, 0, 0, 0, 0, 0, 0, 0]
         self._value_inserted = 0
         self._chosen_item = None
@@ -88,6 +90,10 @@ class VendingMachine:
         :exception: ValueError if it is impossible to give change
         :return: string representing the item, and an 8 element list of change [£2, £1, 50p, 20p, 10p, 5p, 2p, 1p]
         """
+        if self._chosen_item is None:
+            raise ValueError(
+                f"Item not chosen: use VendingMachine.choose_item(item_name)")
+
         if self._value_inserted < self._item_dictionary[self._chosen_item]["price"]:
             expected_money = self._item_dictionary[self._chosen_item]["price"]
             raise ValueError(
