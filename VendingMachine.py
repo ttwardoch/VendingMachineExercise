@@ -157,9 +157,9 @@ class VendingMachine:
         For print statement
         :return:
         """
-        return f"Items in machine: {self._item_dictionary}\nCoin values in p: {self._coins_values}\n" \
+        return f"Items in machine: {self._item_dictionary}\nCoin values [p]: {self._coins_values}\n" \
                f"Coins in machine: {self._coins}\nCoins inserted:   {self._inserted_coins}\n" \
-               f"Value inserted: {self._value_inserted}\nChosen item: {self._chosen_item}"
+               f"Value inserted [p]: {self._value_inserted}\nChosen item: {self._chosen_item}"
 
 
 if __name__ == "__main__":

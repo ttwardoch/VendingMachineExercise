@@ -1,4 +1,5 @@
 # VendingMachineExercise
+## Description
 This repository contains a **VendingMachine** class keeping the state of products and coins up to date.
 
 It is initialised using:
@@ -23,3 +24,15 @@ Currently, recursive algorithm is tried first, and only if it raises an error, t
 VendingMachine class resides in **VendingMachine.py** and change algorithms are in **which_coins_to_return.py**
 
 All methods have tests implemented in **test_VendingMachine.py** and **test_which_coins_to_return.py** which should be used with **pytest**.
+
+## Interactive demo
+**main.py** allows to play around with the **VendingMachine** from the command line.
+Commands available:
+- **choose_item** - choose item from the vending machine
+- **insert_coin** - insert a coin without checking if it is enough
+- **submit** - check if enough change was given
+- **insert_and_submit** - combines **insert_coins** and **submit**
+- **state** - shows the internal state of VendingMachine
+
+## Questions
+- What should happen if it is not possible to give change? Should the coins be returned immediately or allow insertion of extra coins (to hopefully make the return of change possible)?
