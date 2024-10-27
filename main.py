@@ -20,6 +20,7 @@ while True:
                 break
             except ValueError as e:
                 print(e)
+                break
     elif command == "submit":
         try:
             item, change = VM.submit()
